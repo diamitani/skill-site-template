@@ -1,0 +1,1948 @@
+<!--
+  SKILL SITE TEMPLATE v1.0
+  Usage: search/replace the PLACEHOLDERS (e.g. {{SKILL_NAME}}) and duplicate REPEAT blocks.
+  See TEMPLATE_README.md for the full placeholder list.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{TAGLINE}}" />
+  <meta name="author" content="{{AUTHOR}}" />
+  <meta property="og:title" content="{{SKILL_NAME}} — {{TAGLINE}}" />
+  <meta property="og:description" content="{{SUBTITLE}}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/{{SKILL_SLUG}}/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>{{SKILL_NAME}} — {{TAGLINE}}</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Favicon (inline data URI; replace with real .ico if desired) -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232563EB'/%3E%3Ctext x='50' y='62' font-family='Inter,sans-serif' font-size='52' font-weight='800' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E"
+  />
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      /* Color */
+      --bg: #FFFFFF;
+      --bg-secondary: #F8FAFC;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --accent-light: #EFF6FF;
+      --border: #E2E8F0;
+      --success: #10B981;
+
+      /* Typography */
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
+
+      /* Spacing */
+      --section-padding-desktop: 6rem;
+      --section-padding-mobile: 4rem;
+      --container-max: 1200px;
+      --container-pad: 1.5rem;
+
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+
+      /* Shadow */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 4px 24px rgba(0, 0, 0, 0.06);
+
+      /* Transitions */
+      --t-fast: 150ms ease;
+      --t-base: 250ms ease;
+    }
+
+    /* ==========================================================================
+       RESET / BASE
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color var(--t-fast);
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    code,
+    pre {
+      font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    /* ==========================================================================
+       LAYOUT UTILITIES
+       ========================================================================== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--container-pad);
+      width: 100%;
+    }
+
+    section {
+      padding: var(--section-padding-mobile) 0;
+    }
+
+    @media (min-width: 768px) {
+      section {
+        padding: var(--section-padding-desktop) 0;
+      }
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 3rem;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.875rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       NAV
+       ========================================================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--t-base), box-shadow var(--t-base);
+    }
+
+    .nav.scrolled {
+      border-bottom-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 1.0625rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand:hover {
+      color: var(--text);
+    }
+
+    .nav-brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent), #6366F1);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.875rem;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: color var(--t-fast);
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--text);
+      color: var(--bg);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: background-color var(--t-fast), transform var(--t-fast);
+    }
+
+    .nav-cta:hover {
+      background-color: var(--accent);
+      color: var(--bg);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .nav-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      transition: background-color var(--t-fast);
+    }
+
+    .nav-toggle:hover {
+      background-color: var(--bg-secondary);
+    }
+
+    @media (min-width: 768px) {
+      .nav-toggle {
+        display: none;
+      }
+    }
+
+    .nav-toggle-bar {
+      width: 22px;
+      height: 2px;
+      background-color: var(--text);
+      border-radius: 2px;
+      transition: transform var(--t-base), opacity var(--t-base);
+    }
+
+    .nav-toggle.open .nav-toggle-bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .nav-toggle.open .nav-toggle-bar:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle.open .nav-toggle-bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile menu */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg);
+      padding: 2rem var(--container-pad);
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-y: auto;
+      z-index: 99;
+    }
+
+    .nav-mobile.open {
+      display: flex;
+    }
+
+    @media (min-width: 768px) {
+      .nav-mobile {
+        display: none !important;
+      }
+    }
+
+    .nav-mobile-link {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-mobile-cta {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      background-color: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       HERO
+       ========================================================================== */
+    .hero {
+      position: relative;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+      }
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.08), transparent 50%),
+        radial-gradient(circle at 80% 100%, rgba(99, 102, 241, 0.06), transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 4rem;
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      background-color: var(--accent-light);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    }
+
+    .hero-title {
+      font-size: clamp(2.25rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title-line {
+      display: block;
+    }
+
+    .hero-title-line.gradient {
+      background: linear-gradient(135deg, var(--accent) 0%, #6366F1 50%, #8B5CF6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.5vw, 1.1875rem);
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 560px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform var(--t-fast), background-color var(--t-fast),
+        box-shadow var(--t-fast), color var(--t-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-secondary);
+      color: var(--text);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-meta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--success);
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .hero-visual-window {
+      background-color: var(--bg);
+      border-radius: var(--radius-lg);
+      height: 100%;
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .hero-visual-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--bg-secondary);
+    }
+
+    .hero-visual-bar-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--border);
+    }
+
+    .hero-visual-bar-dot:nth-child(1) {
+      background-color: #FCA5A5;
+    }
+    .hero-visual-bar-dot:nth-child(2) {
+      background-color: #FCD34D;
+    }
+    .hero-visual-bar-dot:nth-child(3) {
+      background-color: #6EE7B7;
+    }
+
+    .hero-visual-body {
+      flex: 1;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .hero-visual-line {
+      height: 10px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .hero-visual-line.short {
+      width: 60%;
+    }
+    .hero-visual-line.medium {
+      width: 80%;
+    }
+    .hero-visual-line.accent {
+      background: linear-gradient(90deg, var(--accent), #6366F1);
+      width: 70%;
+    }
+
+    .hero-visual-card {
+      margin-top: auto;
+      padding: 0.875rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background-color: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-visual-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .hero-visual-card-text {
+      flex: 1;
+    }
+
+    .hero-visual-card-title {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .hero-visual-card-meta {
+      font-size: 0.6875rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       ABOUT / STATS
+       ========================================================================== */
+    .about {
+      background-color: var(--bg);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .about-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+    }
+
+    .stat-card {
+      padding: 1.5rem;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: transform var(--t-base), box-shadow var(--t-base);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-value {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       HOW IT WORKS
+       ========================================================================== */
+    .how {
+      background-color: var(--bg-secondary);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .steps {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .step {
+      position: relative;
+      padding: 1.75rem;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: transform var(--t-base), box-shadow var(--t-base);
+    }
+
+    .step:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .step-number {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #6366F1);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .step-desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* ==========================================================================
+       FEATURES
+       ========================================================================== */
+    .features {
+      background-color: var(--bg);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* REPEAT: feature card — duplicate this block per feature (6 total) */
+    .feature-card {
+      padding: 1.75rem;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: transform var(--t-base), box-shadow var(--t-base),
+        border-color var(--t-base);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .feature-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent-light);
+      color: var(--accent);
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* /REPEAT */
+
+    /* ==========================================================================
+       USE CASES
+       ========================================================================== */
+    .usecases {
+      background-color: var(--bg-secondary);
+    }
+
+    .usecases-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .usecases-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* REPEAT: use case card — duplicate this block per use case (4 total) */
+    .usecase-card {
+      position: relative;
+      padding: 1.75rem;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-lg);
+      transition: transform var(--t-base), box-shadow var(--t-base);
+    }
+
+    .usecase-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .usecase-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.625rem;
+    }
+
+    .usecase-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.625rem;
+      letter-spacing: -0.01em;
+    }
+
+    .usecase-desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* /REPEAT */
+
+    /* ==========================================================================
+       TECHNICAL
+       ========================================================================== */
+    .technical {
+      background-color: var(--bg);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* REPEAT: tech detail card — duplicate this block per tech item (4 total) */
+    .tech-card {
+      padding: 1.5rem;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: transform var(--t-base), box-shadow var(--t-base);
+    }
+
+    .tech-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .tech-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.875rem;
+    }
+
+    .tech-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .tech-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .tech-value {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+    }
+
+    .tech-meta {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+
+    /* /REPEAT */
+
+    /* ==========================================================================
+       INSTALL
+       ========================================================================== */
+    .install {
+      background-color: var(--bg-secondary);
+    }
+
+    .install-card {
+      max-width: 720px;
+      margin: 0 auto;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .install-card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .install-card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .install-card-meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .install-code-wrap {
+      position: relative;
+      background-color: #0F172A;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+    }
+
+    .install-code {
+      display: block;
+      color: #E2E8F0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      white-space: pre;
+      font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+    }
+
+    .install-copy {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      padding: 0.4375rem 0.75rem;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: background-color var(--t-fast), border-color var(--t-fast);
+    }
+
+    .install-copy:hover {
+      background-color: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .install-copy.copied {
+      background-color: var(--success);
+      border-color: var(--success);
+    }
+
+    .install-requirements {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      background-color: var(--bg-secondary);
+    }
+
+    .install-requirements-title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .install-requirements ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .install-requirements li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+
+    .install-requirements li::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       CTA
+       ========================================================================== */
+    .cta {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.18), transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.18), transparent 50%),
+        linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      color: #fff;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .cta-eyebrow {
+      display: inline-block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #93C5FD;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-title {
+      font-size: clamp(1.875rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .cta-subtitle {
+      font-size: 1.125rem;
+      color: #CBD5E1;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .btn-cta-primary {
+      background-color: #fff;
+      color: var(--accent);
+    }
+
+    .btn-cta-primary:hover {
+      background-color: var(--bg-secondary);
+      color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-cta-secondary {
+      background-color: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    .btn-cta-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .footer {
+      background-color: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-weight: 700;
+      font-size: 1.0625rem;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-tagline {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      max-width: 360px;
+      line-height: 1.55;
+    }
+
+    .footer-heading {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .footer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .footer-link {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      transition: color var(--t-fast);
+    }
+
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-bottom {
+        flex-direction: row;
+      }
+    }
+
+    /* ==========================================================================
+       ANIMATIONS — IntersectionObserver fade-in
+       ========================================================================== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .fade-in {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ==========================================================================
+       UTILITIES
+       ========================================================================== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .visually-hidden-focusable:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+  </style>
+</head>
+<body>
+  <!-- ====================================================================
+       SECTION 1: NAV
+       ==================================================================== -->
+  <header class="nav" id="nav" role="banner">
+    <div class="container nav-inner">
+      <a href="#top" class="nav-brand" aria-label="{{SKILL_NAME}} home">
+        <span class="nav-brand-mark" aria-hidden="true">S</span>
+        <span>{{SKILL_NAME}}</span>
+      </a>
+
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#how">How It Works</a></li>
+          <li><a class="nav-link" href="#features">Features</a></li>
+          <li><a class="nav-link" href="#usecases">Use Cases</a></li>
+          <li><a class="nav-link" href="#install">Install</a></li>
+        </ul>
+      </nav>
+
+      <a class="nav-cta" href="{{GITHUB_REPO}}" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        View on GitHub
+      </a>
+
+      <button
+        class="nav-toggle"
+        id="nav-toggle"
+        aria-controls="nav-mobile"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+      <a class="nav-mobile-link" href="#about">About</a>
+      <a class="nav-mobile-link" href="#how">How It Works</a>
+      <a class="nav-mobile-link" href="#features">Features</a>
+      <a class="nav-mobile-link" href="#usecases">Use Cases</a>
+      <a class="nav-mobile-link" href="#install">Install</a>
+      <a
+        class="nav-mobile-cta"
+        href="{{GITHUB_REPO}}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View on GitHub →
+      </a>
+    </div>
+  </header>
+
+  <a id="top"></a>
+
+  <!-- ====================================================================
+       SECTION 2: HERO
+       ==================================================================== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-content fade-in">
+        <span class="hero-badge">
+          <span class="hero-badge-dot" aria-hidden="true"></span>
+          {{HERO_BADGE}}
+        </span>
+
+        <h1 class="hero-title" id="hero-title">
+          <span class="hero-title-line">{{HERO_LINE_1}}</span>
+          <span class="hero-title-line gradient">{{HERO_LINE_2}}</span>
+          <span class="hero-title-line">{{HERO_LINE_3}}</span>
+        </h1>
+
+        <p class="hero-subtitle">{{SUBTITLE}}</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install">
+            Get Started
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a
+            class="btn btn-secondary"
+            href="{{GITHUB_REPO}}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            Source
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span class="hero-meta-item">
+            <span class="hero-meta-dot" aria-hidden="true"></span>
+            {{CATEGORY}}
+          </span>
+          <span class="hero-meta-item">By {{AUTHOR}}</span>
+        </div>
+      </div>
+
+      <div class="hero-visual fade-in" aria-hidden="true">
+        <div class="hero-visual-window">
+          <div class="hero-visual-bar">
+            <span class="hero-visual-bar-dot"></span>
+            <span class="hero-visual-bar-dot"></span>
+            <span class="hero-visual-bar-dot"></span>
+          </div>
+          <div class="hero-visual-body">
+            <div class="hero-visual-line medium"></div>
+            <div class="hero-visual-line short"></div>
+            <div class="hero-visual-line accent"></div>
+            <div class="hero-visual-line medium"></div>
+            <div class="hero-visual-card">
+              <div class="hero-visual-card-icon">{{FEATURE_1_ICON}}</div>
+              <div class="hero-visual-card-text">
+                <div class="hero-visual-card-title">{{FEATURE_1_TITLE}}</div>
+                <div class="hero-visual-card-meta">{{FEATURE_1_DESC}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 3: ABOUT (Stats)
+       ==================================================================== -->
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">About</span>
+        <h2 class="section-title" id="about-title">Why {{SKILL_NAME}}</h2>
+        <p class="section-subtitle">
+          Built for teams who want {{TAGLINE.toLowerCase()}}.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <!-- REPEAT: stat card — duplicate this block per stat (4 total) -->
+        <div class="stat-card fade-in">
+          <div class="stat-value">{{STAT_1_VALUE}}</div>
+          <div class="stat-label">{{STAT_1_LABEL}}</div>
+        </div>
+        <!-- /REPEAT -->
+
+        <div class="stat-card fade-in">
+          <div class="stat-value">{{STAT_2_VALUE}}</div>
+          <div class="stat-label">{{STAT_2_LABEL}}</div>
+        </div>
+
+        <div class="stat-card fade-in">
+          <div class="stat-value">{{STAT_3_VALUE}}</div>
+          <div class="stat-label">{{STAT_3_LABEL}}</div>
+        </div>
+
+        <div class="stat-card fade-in">
+          <div class="stat-value">{{STAT_4_VALUE}}</div>
+          <div class="stat-label">{{STAT_4_LABEL}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 4: HOW IT WORKS
+       ==================================================================== -->
+  <section class="how" id="how" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">Process</span>
+        <h2 class="section-title" id="how-title">How It Works</h2>
+        <p class="section-subtitle">
+          Four steps from install to insight. No steep learning curve.
+        </p>
+      </div>
+
+      <div class="steps">
+        <!-- REPEAT: step card — duplicate this block per step (4 total) -->
+        <div class="step fade-in">
+          <span class="step-number">1</span>
+          <h3 class="step-title">{{STEP_1_TITLE}}</h3>
+          <p class="step-desc">{{STEP_1_DESC}}</p>
+        </div>
+        <!-- /REPEAT -->
+
+        <div class="step fade-in">
+          <span class="step-number">2</span>
+          <h3 class="step-title">{{STEP_2_TITLE}}</h3>
+          <p class="step-desc">{{STEP_2_DESC}}</p>
+        </div>
+
+        <div class="step fade-in">
+          <span class="step-number">3</span>
+          <h3 class="step-title">{{STEP_3_TITLE}}</h3>
+          <p class="step-desc">{{STEP_3_DESC}}</p>
+        </div>
+
+        <div class="step fade-in">
+          <span class="step-number">4</span>
+          <h3 class="step-title">{{STEP_4_TITLE}}</h3>
+          <p class="step-desc">{{STEP_4_DESC}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 5: FEATURES
+       ==================================================================== -->
+  <section class="features" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">Features</span>
+        <h2 class="section-title" id="features-title">Everything you need</h2>
+        <p class="section-subtitle">
+          Packed with thoughtful defaults. Customise when you need to.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- REPEAT: feature card — duplicate this block per feature (6 total) -->
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_1_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_1_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_1_DESC}}</p>
+        </div>
+        <!-- /REPEAT -->
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_2_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_2_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_2_DESC}}</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_3_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_3_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_3_DESC}}</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_4_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_4_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_4_DESC}}</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_5_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_5_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_5_DESC}}</p>
+        </div>
+
+        <div class="feature-card fade-in">
+          <span class="feature-icon" aria-hidden="true">{{FEATURE_6_ICON}}</span>
+          <h3 class="feature-title">{{FEATURE_6_TITLE}}</h3>
+          <p class="feature-desc">{{FEATURE_6_DESC}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 6: USE CASES
+       ==================================================================== -->
+  <section class="usecases" id="usecases" aria-labelledby="usecases-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">Use Cases</span>
+        <h2 class="section-title" id="usecases-title">Built for real workflows</h2>
+        <p class="section-subtitle">
+          From solo founders to enterprise teams — flexible enough to fit.
+        </p>
+      </div>
+
+      <div class="usecases-grid">
+        <!-- REPEAT: use case card — duplicate this block per use case (4 total) -->
+        <div class="usecase-card fade-in">
+          <span class="usecase-eyebrow">Use Case 01</span>
+          <h3 class="usecase-title">{{USECASE_1_TITLE}}</h3>
+          <p class="usecase-desc">{{USECASE_1_DESC}}</p>
+        </div>
+        <!-- /REPEAT -->
+
+        <div class="usecase-card fade-in">
+          <span class="usecase-eyebrow">Use Case 02</span>
+          <h3 class="usecase-title">{{USECASE_2_TITLE}}</h3>
+          <p class="usecase-desc">{{USECASE_2_DESC}}</p>
+        </div>
+
+        <div class="usecase-card fade-in">
+          <span class="usecase-eyebrow">Use Case 03</span>
+          <h3 class="usecase-title">{{USECASE_3_TITLE}}</h3>
+          <p class="usecase-desc">{{USECASE_3_DESC}}</p>
+        </div>
+
+        <div class="usecase-card fade-in">
+          <span class="usecase-eyebrow">Use Case 04</span>
+          <h3 class="usecase-title">{{USECASE_4_TITLE}}</h3>
+          <p class="usecase-desc">{{USECASE_4_DESC}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 7: TECHNICAL
+       ==================================================================== -->
+  <section class="technical" id="technical" aria-labelledby="tech-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">Technical</span>
+        <h2 class="section-title" id="tech-title">Under the hood</h2>
+        <p class="section-subtitle">
+          Transparent stack. No surprises. Easy to extend.
+        </p>
+      </div>
+
+      <div class="tech-grid">
+        <!-- REPEAT: tech card — duplicate this block per tech item (4 total) -->
+        <div class="tech-card fade-in">
+          <div class="tech-card-header">
+            <span class="tech-icon" aria-hidden="true">01</span>
+            <span class="tech-title">{{TECH_1_TITLE}}</span>
+          </div>
+          <div class="tech-value">{{TECH_1_VALUE}}</div>
+          <p class="tech-meta">{{TECH_1_DESC}}</p>
+        </div>
+        <!-- /REPEAT -->
+
+        <div class="tech-card fade-in">
+          <div class="tech-card-header">
+            <span class="tech-icon" aria-hidden="true">02</span>
+            <span class="tech-title">{{TECH_2_TITLE}}</span>
+          </div>
+          <div class="tech-value">{{TECH_2_VALUE}}</div>
+          <p class="tech-meta">{{TECH_2_DESC}}</p>
+        </div>
+
+        <div class="tech-card fade-in">
+          <div class="tech-card-header">
+            <span class="tech-icon" aria-hidden="true">03</span>
+            <span class="tech-title">{{TECH_3_TITLE}}</span>
+          </div>
+          <div class="tech-value">{{TECH_3_VALUE}}</div>
+          <p class="tech-meta">{{TECH_3_DESC}}</p>
+        </div>
+
+        <div class="tech-card fade-in">
+          <div class="tech-card-header">
+            <span class="tech-icon" aria-hidden="true">04</span>
+            <span class="tech-title">{{TECH_4_TITLE}}</span>
+          </div>
+          <div class="tech-value">{{TECH_4_VALUE}}</div>
+          <p class="tech-meta">{{TECH_4_DESC}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 8: INSTALL
+       ==================================================================== -->
+  <section class="install" id="install" aria-labelledby="install-title">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-eyebrow">Install</span>
+        <h2 class="section-title" id="install-title">Up and running in 60 seconds</h2>
+        <p class="section-subtitle">
+          One command. Standard requirements. You're set.
+        </p>
+      </div>
+
+      <div class="install-card fade-in">
+        <div class="install-card-header">
+          <div>
+            <div class="install-card-title">Install {{SKILL_NAME}}</div>
+            <div class="install-card-meta">Copy and run in your terminal</div>
+          </div>
+        </div>
+
+        <div class="install-code-wrap">
+          <button class="install-copy" id="install-copy" type="button" aria-label="Copy install command">
+            Copy
+          </button>
+          <code class="install-code" id="install-code">{{INSTALL_COMMAND}}</code>
+        </div>
+
+        <div class="install-requirements">
+          <div class="install-requirements-title">Requirements</div>
+          <ul>
+            <!-- REPEAT: requirement — duplicate as many <li> as needed -->
+            <li>{{REQUIREMENTS_LIST}}</li>
+            <!-- /REPEAT -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 9: CTA
+       ==================================================================== -->
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="container cta-inner fade-in">
+      <span class="cta-eyebrow">{{CATEGORY}}</span>
+      <h2 class="cta-title" id="cta-title">{{CTA_HEADING}}</h2>
+      <p class="cta-subtitle">{{CTA_SUBTEXT}}</p>
+      <div class="cta-actions">
+        <a class="btn btn-cta-primary" href="{{GITHUB_REPO}}" target="_blank" rel="noopener noreferrer">
+          Get {{SKILL_NAME}}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn-cta-secondary" href="#features">
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTION 10: FOOTER
+       ==================================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="nav-brand-mark" aria-hidden="true">S</span>
+            <span>{{SKILL_NAME}}</span>
+          </div>
+          <p class="footer-tagline">
+            {{TAGLINE}}. Built for {{CATEGORY}} workflows by {{AUTHOR}}.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-heading">Navigate</div>
+          <ul class="footer-list">
+            <li><a class="footer-link" href="#about">About</a></li>
+            <li><a class="footer-link" href="#features">Features</a></li>
+            <li><a class="footer-link" href="#install">Install</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-heading">Resources</div>
+          <ul class="footer-list">
+            <li>
+              <a
+                class="footer-link"
+                href="{{GITHUB_REPO}}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub Repository
+              </a>
+            </li>
+            <li>
+              <a
+                class="footer-link"
+                href="{{GITHUB_REPO}}#readme"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a
+                class="footer-link"
+                href="{{GITHUB_REPO}}/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Report an Issue
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="footer-year">2026</span> {{AUTHOR}}. All rights reserved.</span>
+        <span>{{SKILL_NAME}} · v1.0</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================================
+       SCRIPTS
+       ==================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      // ---- Sticky nav scroll state ----
+      const nav = document.getElementById('nav');
+      const onScroll = () => {
+        if (!nav) return;
+        if (window.scrollY > 8) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // ---- Mobile hamburger toggle ----
+      const toggle = document.getElementById('nav-toggle');
+      const mobile = document.getElementById('nav-mobile');
+
+      function closeMobile() {
+        if (!toggle || !mobile) return;
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        mobile.classList.remove('open');
+        mobile.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      function openMobile() {
+        if (!toggle || !mobile) return;
+        toggle.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+        mobile.classList.add('open');
+        mobile.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      if (toggle && mobile) {
+        toggle.addEventListener('click', () => {
+          const isOpen = toggle.classList.contains('open');
+          if (isOpen) closeMobile();
+          else openMobile();
+        });
+
+        mobile.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', closeMobile);
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMobile();
+        });
+
+        // Close when resizing to desktop
+        window.addEventListener('resize', () => {
+          if (window.innerWidth >= 768) closeMobile();
+        });
+      }
+
+      // ---- Smooth scroll for in-page anchors ----
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const href = anchor.getAttribute('href');
+          if (!href || href === '#' || href.length < 2) return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          const navHeight = nav ? nav.offsetHeight : 0;
+          const top =
+            target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+          window.scrollTo({
+            top,
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          });
+        });
+      });
+
+      // ---- IntersectionObserver fade-in ----
+      const fadeEls = document.querySelectorAll('.fade-in');
+      if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+        fadeEls.forEach((el) => io.observe(el));
+      } else {
+        // No animation support or reduced motion: show everything
+        fadeEls.forEach((el) => el.classList.add('visible'));
+      }
+
+      // ---- Copy-to-clipboard ----
+      const copyBtn = document.getElementById('install-copy');
+      const codeEl = document.getElementById('install-code');
+      if (copyBtn && codeEl) {
+        copyBtn.addEventListener('click', async () => {
+          const text = codeEl.textContent || '';
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              // Fallback for non-secure contexts
+              const ta = document.createElement('textarea');
+              ta.value = text;
+              ta.setAttribute('readonly', '');
+              ta.style.position = 'fixed';
+              ta.style.top = '-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+            }
+            const original = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+              copyBtn.textContent = original;
+              copyBtn.classList.remove('copied');
+            }, 2000);
+          } catch (err) {
+            copyBtn.textContent = 'Press ⌘C';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy';
+            }, 2000);
+          }
+        });
+      }
+
+      // ---- Footer year ----
+      const yearEl = document.getElementById('footer-year');
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
